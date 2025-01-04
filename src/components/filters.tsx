@@ -1,18 +1,20 @@
 import { useState } from "react";
+import { useFilters } from "../hooks/useFilters.ts";
 
-export function Filters({onChange}){
+export function Filters(){
  
-    const [minPrice,setMinPrice]=useState(0)
+    const {filters,setFilters}=useFilters()
+
+
     const onChangeFilter=(event)=>{
-        setMinPrice(event.target.value)
-    onChange(prevFilters => ({
+        setFilters(prevFilters => ({
       ...prevFilters, // Mantiene el valor anterior de 'minPrice'
       minPrice:  event.target.value // Nueva categoría que deseas establecer
     }));
   }
 
   const onChangeCategory=(event)=>{
-    onChange(prevFilters => ({
+    setFilters(prevFilters => ({
       ...prevFilters, // Mantiene el valor anterior de 'minPrice'
       category:  event.target.value // Nueva categoría que deseas establecer
     }));
@@ -20,18 +22,18 @@ export function Filters({onChange}){
     return( 
     <main>
         <div>
-        <input type="range" min="0" max="5000" onChange={onChangeFilter} value={minPrice}/>
-        <span>{minPrice}</span>
+        <input type="range" min="0" max="5000" onChange={onChangeFilter}/>
+        <span>{filters.minPrice}</span>
         </div>
         <div>
-            <select name="categorys" id="categorys" value={onChange.category} onChange={onChangeCategory}>
+            <select name="categorys" id="categorys" value={filters.category} onChange={onChangeCategory}>
             <option value="all">---Selecciona una categoria---</option>
             <option value="men's clothing">Men's clothing</option>
             <option value="jewelery">Jewelery</option>
             <option value="electronics">Electronics</option>
             <option value="women's clothing">Women's clothing</option>
             </select>
-            <p>{onChange.category}</p>
+            <p>{filters.category}</p>
         </div>
 
        

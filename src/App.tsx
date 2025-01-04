@@ -2,31 +2,10 @@ import { Products } from "./components/product"
 import { Filters } from "./components/filters"
 import { createContext, useContext, useEffect, useState } from "react"
 import { FiltersContext } from "./context/filters"
-
-
-function useFilter(){
-  // const [filters,setFilters]=useState({
-  //   category:'all',
-  //   minPrice:0
-  // })
-
-  const {filters,setFilters}=useContext(FiltersContext)
-
-
-  const filterProducts =(products)=>{
-    return products.filter(product=>
-      product.price>= filters.minPrice &&
-      (
-        filters.category=='all' || 
-        product.category == filters.category
-      )
-    )
-  }
-
-
-
-  return {filterProducts,setFilters}
-}
+import {useFilters} from '../src/hooks/useFilters'
+import { Cart } from "./components/cart"
+import { CartProvider } from "./context/cart"
+import { useCart } from "./hooks/useCart"
 
 
 function App() {
@@ -40,20 +19,22 @@ function App() {
       })
   }, []);
 
-  const {filterProducts,setFilters}=useFilter()
+  const {filterProducts,setFilters}=useFilters()
   const filteredProducts=filterProducts(data)
+ 
+  
 
-            
   return (
-    <>
+    <CartProvider>
     <div>
     <h1>Shopping Cart</h1>
+    <Cart/>
     <Filters 
-    onChange={setFilters}
+   
     />
   <Products products={filteredProducts}/>
   </div>
-    </>
+    </CartProvider>
   )
 }
 
